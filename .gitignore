@@ -10,3 +10,16 @@
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*
+
+# Downloaded gradle files
+.gradle/
+
+# Vim swap files
+*.swp
+
+# IDEA files
+/.idea/
+*.iml
+
+# OSX files
+*.DS_Store

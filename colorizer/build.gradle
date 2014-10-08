@@ -1,0 +1,83 @@
+apply plugin: 'java'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'checkstyle'
+
+description = 'Custom Colorizer library for logback'
+
+dependencies {
+    compile fileTree(dir: 'src', include: ['*.jar'])
+    compile 'ch.qos.logback:logback-classic:1.1.2'
+    testCompile "org.mockito:mockito-core:1.10.5"
+    testCompile "junit:junit:4.11"
+    testCompile "junit-addons:junit-addons:1.4"
+}
+
+// Configure FindBugs for maximum effort and to report all failures
+findbugs {
+    effort = 'max'
+    reportLevel = "low"
+    ignoreFailures = true
+    excludeFilter = file("$projectDir/config/findbugs/excludeFilter.xml")
+}
+findbugsTest {
+    effort = 'max'
+    reportLevel = "low"
+    ignoreFailures = true
+    excludeFilter = file("$projectDir/config/findbugs/excludeFilter.xml")
+}
+
+// Enable HTML output from FindBugs instead of XML
+tasks.withType(FindBugs) {
+    reports {
+        xml.enabled = false
+        html.enabled = true
+    }
+}
+
+pmd {
+    ruleSets = [
+            'java-android',
+            'java-basic',
+            'java-braces',
+            'java-clone',
+            'java-codesize',
+            'java-comments',
+            'java-controversial',
+            'java-coupling',
+            'java-design',
+            'java-empty',
+            'java-finalizers',
+            'java-imports',
+            'java-j2ee',
+            'java-javabeans',
+            'java-junit',
+            'java-logging-jakarta-commons',
+            'java-logging-java',
+            'java-migrating',
+            'java-naming',
+            'java-optimizations',
+            'java-strictexception',
+            'java-strings',
+            'java-sunsecure',
+            'java-typeresolution',
+            'java-unnecessary',
+            'java-unusedcode'
+            ]
+    ignoreFailures = true
+    toolVersion = '5.1.3'
+}
+
+checkstyle {
+    ignoreFailures = true
+}
+
+checkstyleMain {
+    doLast {
+        ant.xslt(in: "$buildDir/reports/checkstyle/main.xml",
+                style:"config/checkstyle/checkstyle.xsl",
+                out:"$buildDir/reports/checkstyle/checkstyle.html"
+        )
+        println("See final Checktyle report at $buildDir/reports/checkstyle/checkstyle.html")
+    }
+}
