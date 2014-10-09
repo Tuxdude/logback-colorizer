@@ -73,9 +73,9 @@ Example:
 
 `boldred@white,yellow@black,green@,blue@,cyan@`
  
- The format is:
+ The order of specifying the log colors for different log levels is:
 
-`COLOR_CONFIG_ERROR,COLOR_CONFIG_WARN,COLOR_CONFIG_INFO,COLOR_CONFIG_DEBUG,COLOR_CONFIG_TRACE`
+`Error,Warn,Info,Debug,Trace`
 
 Each color configuration specifies a foreground and a background color:
 
@@ -84,25 +84,25 @@ Each color configuration specifies a foreground and a background color:
 If a color is left blank (no whitespaces), then the log color is left
 unchanged.
 
-Example color configuration, which sets the foreground color to `white` and
-background color to `boldblue`.
+- *Example color configuration, which sets the foreground color to `white` and
+background color to `boldblue`.*
 
-`white@boldblue`
+    `white@boldblue`
 
-Example color configuration, which sets the foreground color to `magenta` and
-leaves the background color unchanged:
+- *Example color configuration, which sets the foreground color to `magenta` and
+leaves the background color unchanged:*
 
-`magenta@`
+    `magenta@`
 
-Example color configuration, which sets the background color to `boldgreen`
-and leaves the foreground color unchanged:
+- *Example color configuration, which sets the background color to `boldgreen`
+and leaves the foreground color unchanged:*
 
-`@boldgreen`
+    `@boldgreen`
 
-Example color configuration, which leaves both the foreground and background
-colors untouched.
+- *Example color configuration, which leaves both the foreground and background
+colors untouched:*
 
-`@`
+    `@`
 
 
 [1]: https://github.com/Tuxdude/logback-colorizer
