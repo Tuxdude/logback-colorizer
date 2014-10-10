@@ -71,9 +71,11 @@ one for each log level.
 
 Example:
 
-`boldred@white,yellow@black,green@,blue@,cyan@`
+```xml
+<property scope="context" name="COLORIZER_COLORS" value="boldred@white,yellow@black,green@,blue@,cyan@" />
+```
  
- The order of specifying the log colors for different log levels is:
+The order of specifying the log colors for different log levels is:
 
 `Error,Warn,Info,Debug,Trace`
 
@@ -103,6 +105,24 @@ and leaves the foreground color unchanged:*
 colors untouched:*
 
     `@`
+
+Some valid example properties:
+
+```xml
+<property scope="context" name="COLORIZER_COLORS" value="red@,yellow@,green@,blue@,cyan@" />
+```
+
+```xml
+<property scope="context" name="COLORIZER_COLORS" value="@red,@yellow,@green,@blue,@cyan" />
+```
+
+```xml
+<property scope="context" name="COLORIZER_COLORS" value="red@white,yellow@black,@,@,@" />
+```
+
+```xml
+<property scope="context" name="COLORIZER_COLORS" value="white@magenta,boldyellow@black,green@white,boldblue@,@" />
+```
 
 
 [1]: https://github.com/Tuxdude/logback-colorizer
