@@ -133,4 +133,30 @@ afterEvaluate { project ->
             }
         }
     }
+
+    /* Enable later
+    signing {
+        required gradle.taskGraph.hasTask("uploadArchives")
+        sign configurations.archives
+    }*/
+
+    task sourceJavadocs(type: Javadoc) {
+        source = sourceSets.main.java.srcDirs
+        classpath = configurations.compile
+    }
+
+    task javadocJar(type: Jar, dependsOn: javadoc) {
+        classifier = 'javadoc'
+        from javadoc.destinationDir
+    }
+
+    task allSourcesJar(type: Jar) {
+        classifier = 'sources'
+        from sourceSets.main.allSource
+    }
+
+    artifacts {
+        archives allSourcesJar
+        archives javadocJar
+    }
 }
