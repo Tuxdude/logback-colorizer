@@ -125,6 +125,50 @@ Some valid example properties:
 ```
 
 
+Conversion rule and pattern
+===========================
+The final part of configuring the [`logback-colorizer`][1] is to specify a
+custom conversion rule and use this in the encoder `pattern`.
+
+Define a `conversionRule` using a custom `conversionWord` for LogColorizer.
+Use this custom word in the pattern to enable colorization. Only the part
+of the pattern which is within the parantheses `(...)` gets colorized, and
+can be used numerous times within the same pattern.
+
+- An example using `colorize` as the keyword to enable colorization:
+
+```xml
+<conversionRule conversionWord="colorize" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %colorize(%msg%n)</pattern>
+    </encoder>
+</appender>
+```
+
+- An example using `github` as the keyword to enable colorization:
+
+```xml
+<conversionRule conversionWord="github" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <pattern>%d{HH:mm:ss.SSS} %github([%thread]) %-5level %logger{36} - %github(%msg%n)</pattern>
+    </encoder>
+</appender>
+```
+
+- An example using `rainbow` as the keyword to enable colorization:
+
+```xml
+<conversionRule conversionWord="rainbow" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
+<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+        <pattern>%d{HH:mm:ss.SSS} %rainbow([%thread]) %-5level %rainbow(%logger{36}) - %rainbow(%msg%n)</pattern>
+    </encoder>
+</appender>
+```
+
+
 [1]: https://github.com/Tuxdude/logback-colorizer
 [2]: https://github.com/Tuxdude/maven-artifacts/blob/master/org/tuxdude/logback/extensions/logback-colorizer/1.0.0/logback-colorizer-1.0.0.jar
 [21]: http://logback.qos.ch/
