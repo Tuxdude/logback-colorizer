@@ -16,32 +16,38 @@ def getMavenSigningConfigProperty() {
     return "maven-signing-config"
 }
 
-def getSigningProperties() {
-    Properties signingProperties = null
-    File mavenSigningFile = new File(getMavenSigningPropertiesFilename())
-    if (mavenSigningFile.exists()) {
-        println "Maven Signing Properties file exists"
+def getSonatypeOssrhPropertiesFilename() {
+    return "$rootDir/sonatype-ossrh.properties"
+}
+
+def getSonatypeOssrhConfigProperty() {
+    return "sonatype-ossrh-config"
+}
+
+def getLinkedProperties(String linkedFilename, String propertyName) {
+    Properties returnProperties = null
+    File linkFile = new File(linkedFilename)
+    if (linkFile.exists()) {
         Properties properties = new Properties()
-        properties.load(new FileInputStream(mavenSigningFile))
-        if (properties.containsKey(getMavenSigningConfigProperty())) {
-            File signingInfoFile = new File(properties[getMavenSigningConfigProperty()])
-            if (signingInfoFile.exists()) {
+        properties.load(new FileInputStream(linkFile))
+        if (properties.containsKey(propertyName)) {
+            File propertiesFile = new File(properties[propertyName])
+            if (propertiesFile.exists()) {
                 properties = new Properties()
-                properties.load(new FileInputStream(signingInfoFile))
-                signingProperties = properties
-            }
-            else {
-                println "Signing configuration file not found!"
+                properties.load(new FileInputStream(propertiesFile))
+                returnProperties = properties
             }
         }
-        else {
-            println "Cannot find signing configuration file property!"
-        }
     }
-    else {
-        println "Cannot find Maven Signing Properties file"
-    }
-    return signingProperties
+    return returnProperties
+}
+
+def getSigningProperties() {
+    return getLinkedProperties(getMavenSigningPropertiesFilename(), getMavenSigningConfigProperty())
+}
+
+def getSonatypeOssrhProperties() {
+    return getLinkedProperties(getSonatypeOssrhPropertiesFilename(), getSonatypeOssrhConfigProperty())
 }
 
 // GRADLE-1285 - workaround to get <packaging>jar</packaging>
@@ -54,13 +60,60 @@ def pomPackagingElement = { root ->
     }
 }
 
+def getRepositoryUrl(Boolean isSnapshot) {
+    String url = null
+    if (isSnapshot) {
+        url = (ext["useSonatypeOssrhCredentials"]) ? ext["ossrhSnapshotUrl"] : SNAPSHOT_REPOSITORY_URL
+    }
+    else {
+        url = (ext["useSonatypeOssrhCredentials"]) ? ext["ossrhReleaseUrl"] : RELEASE_REPOSITORY_URL
+    }
+    return url
+}
+
+def getRepositoryUsername(Boolean isSnapshot) {
+    if (ext["useSonatypeOssrhCredentials"]) {
+        return ext["ossrhUsername"]
+    }
+    else {
+        return (isSnapshot) ? SNAPSHOT_REPOSITORY_USERNAME : RELEASE_REPOSITORY_USERNAME
+    }
+}
+
+def getRepositoryPassword(Boolean isSnapshot) {
+    if (ext["useSonatypeOssrhCredentials"]) {
+        return ext["ossrhPassword"]
+    }
+    else {
+        return (isSnapshot) ? SNAPSHOT_REPOSITORY_PASSWORD : RELEASE_REPOSITORY_PASSWORD
+    }
+}
+
+afterEvaluate { project ->
 uploadArchives {
     repositories {
         mavenDeployer {
-            repository(url: RELEASE_REPOSITORY_URL) {
-                authentication(userName: "", password: "")
+            repository(url: project.getRepositoryUrl(false)) {
+                authentication(
+                    userName: project.getRepositoryUsername(false),
+                    password: project.getRepositoryPassword(false))
             }
 
+            snapshotRepository(url: getRepositoryUrl(true)) {
+                authentication(
+                    userName: project.getRepositoryUsername(true),
+                    password: project.getRepositoryPassword(true))
+            }
+
+
+        }
+    }
+}
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
             pom.groupId = GROUP
             pom.artifactId = POM_ARTIFACT_ID
             pom.version = VERSION_NAME
@@ -124,6 +177,10 @@ artifacts {
     archives javadocJar
 }
 
+// Disable OSSRH Sonatype Credentials by default
+// unless we find the configuration
+ext["useSonatypeOssrhCredentials"] = false
+
 // Maven Signing stuff
 Properties signingProperties = null
 if (isSigningRequired()) {
@@ -137,8 +194,6 @@ if (signingProperties != null) {
     ext."signing.password" = signingProperties['password']
     ext."signing.secretKeyRingFile" = signingProperties['secretKeyRingFile']
 
-    ext."signing.ossrhUsername" = signingProperties['ossrhUsername']
-    ext."signing.ossrhPassword" = signingProperties['ossrhPassword']
 
     uploadArchives {
         repositories {
@@ -152,6 +207,19 @@ if (signingProperties != null) {
         required true
     }
     println "Maven Signing Enabled"
+
+    Properties sonatypeOssrhProperties = getSonatypeOssrhProperties()
+    if (sonatypeOssrhProperties != null) {
+        ext."ossrhUsername" = sonatypeOssrhProperties['ossrhUsername']
+        ext."ossrhPassword" = sonatypeOssrhProperties['ossrhPassword']
+        ext."ossrhReleaseUrl" = sonatypeOssrhProperties['ossrhReleaseUrl']
+        ext."ossrhSnapshotUrl" = sonatypeOssrhProperties['ossrhSnapshotUrl']
+        if (ext["ossrhUsername"] != null && ext["ossrhPassword"] != null &&
+            ext["ossrhReleaseUrl"] != null && ext["ossrhSnapshotUrl"] != null) {
+            ext["useSonatypeOssrhCredentials"] = true
+        }
+        println "Using Sonatype OSSRH Credentials"
+    }
 }
 else {
     // Disable Signing
