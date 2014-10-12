@@ -3,9 +3,10 @@
 buildscript {
     repositories {
         jcenter()
+        maven { url 'http://repo.spring.io/plugins-release' }
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.12.2'
+        classpath 'org.springframework.build.gradle:propdeps-plugin:0.0.7'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -16,4 +17,11 @@ allprojects {
     repositories {
         jcenter()
     }
+}
+
+configure(allprojects) {
+    apply plugin: 'propdeps'
+    apply plugin: 'propdeps-maven'
+    apply plugin: 'propdeps-idea'
+    apply plugin: 'propdeps-eclipse'
 }

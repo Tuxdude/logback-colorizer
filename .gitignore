@@ -24,6 +24,9 @@ hs_err_pid*
 # OSX files
 *.DS_Store
 
+# Build files
+/build
+
 # Maven signing information
 maven-signing.properties
 sonatype-ossrh.properties
