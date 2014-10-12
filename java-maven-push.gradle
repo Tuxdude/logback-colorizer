@@ -60,29 +60,29 @@ def pomPackagingElement = { root ->
     }
 }
 
-def getRepositoryUrl(Boolean isSnapshot) {
+ext.getRepositoryUrl = { Boolean isSnapshot ->
     String url = null
     if (isSnapshot) {
-        url = (ext["useSonatypeOssrhCredentials"]) ? ext["ossrhSnapshotUrl"] : SNAPSHOT_REPOSITORY_URL
+        url = (ext.useSonatypeOssrhCredentials) ? ext.ossrhSnapshotUrl : SNAPSHOT_REPOSITORY_URL
     }
     else {
-        url = (ext["useSonatypeOssrhCredentials"]) ? ext["ossrhReleaseUrl"] : RELEASE_REPOSITORY_URL
+        url = (ext.useSonatypeOssrhCredentials) ? ext.ossrhReleaseUrl : RELEASE_REPOSITORY_URL
     }
     return url
 }
 
-def getRepositoryUsername(Boolean isSnapshot) {
-    if (ext["useSonatypeOssrhCredentials"]) {
-        return ext["ossrhUsername"]
+ext.getRepositoryUsername = { Boolean isSnapshot ->
+    if (ext.useSonatypeOssrhCredentials) {
+        return ext.ossrhUsername
     }
     else {
         return (isSnapshot) ? SNAPSHOT_REPOSITORY_USERNAME : RELEASE_REPOSITORY_USERNAME
     }
 }
 
-def getRepositoryPassword(Boolean isSnapshot) {
-    if (ext["useSonatypeOssrhCredentials"]) {
-        return ext["ossrhPassword"]
+ext.getRepositoryPassword = { Boolean isSnapshot ->
+    if (ext.useSonatypeOssrhCredentials) {
+        return ext.ossrhPassword
     }
     else {
         return (isSnapshot) ? SNAPSHOT_REPOSITORY_PASSWORD : RELEASE_REPOSITORY_PASSWORD
@@ -90,25 +90,24 @@ def getRepositoryPassword(Boolean isSnapshot) {
 }
 
 afterEvaluate { project ->
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            repository(url: project.getRepositoryUrl(false)) {
-                authentication(
-                    userName: project.getRepositoryUsername(false),
-                    password: project.getRepositoryPassword(false))
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                repository(url: project.getRepositoryUrl(false)) {
+                    authentication(
+                        userName: project.getRepositoryUsername(false),
+                        password: project.getRepositoryPassword(false))
+                }
+
+                snapshotRepository(url: project.getRepositoryUrl(true)) {
+                    authentication(
+                        userName: project.getRepositoryUsername(true),
+                        password: project.getRepositoryPassword(true))
+                }
+
             }
-
-            snapshotRepository(url: project.getRepositoryUrl(true)) {
-                authentication(
-                    userName: project.getRepositoryUsername(true),
-                    password: project.getRepositoryPassword(true))
-            }
-
-
         }
     }
-}
 }
 
 uploadArchives {
@@ -163,7 +162,7 @@ uploadArchives {
 task javadocJar(type: Jar, dependsOn: javadoc) {
     description = 'Builds a javadoc jar artifact suitable for maven deployment'
     classifier = 'javadoc'
-    from javadoc
+    from javadoc.destinationDir
 }
 
 task allSourcesJar(type: Jar) {
@@ -177,9 +176,9 @@ artifacts {
     archives javadocJar
 }
 
-// Disable OSSRH Sonatype Credentials by default
+// Disable using Sonatype OSSRH Credentials by default
 // unless we find the configuration
-ext["useSonatypeOssrhCredentials"] = false
+ext.useSonatypeOssrhCredentials = false
 
 // Maven Signing stuff
 Properties signingProperties = null
@@ -208,20 +207,27 @@ if (signingProperties != null) {
     }
     println "Maven Signing Enabled"
 
+    // Fetch Sonatype OSSRH credentials
     Properties sonatypeOssrhProperties = getSonatypeOssrhProperties()
     if (sonatypeOssrhProperties != null) {
-        ext."ossrhUsername" = sonatypeOssrhProperties['ossrhUsername']
-        ext."ossrhPassword" = sonatypeOssrhProperties['ossrhPassword']
-        ext."ossrhReleaseUrl" = sonatypeOssrhProperties['ossrhReleaseUrl']
-        ext."ossrhSnapshotUrl" = sonatypeOssrhProperties['ossrhSnapshotUrl']
-        if (ext["ossrhUsername"] != null && ext["ossrhPassword"] != null &&
-            ext["ossrhReleaseUrl"] != null && ext["ossrhSnapshotUrl"] != null) {
-            ext["useSonatypeOssrhCredentials"] = true
+        ext.ossrhUsername = sonatypeOssrhProperties['ossrhUsername']
+        ext.ossrhPassword = sonatypeOssrhProperties['ossrhPassword']
+        ext.ossrhReleaseUrl = sonatypeOssrhProperties['ossrhReleaseUrl']
+        ext.ossrhSnapshotUrl = sonatypeOssrhProperties['ossrhSnapshotUrl']
+        if (ext.ossrhUsername != null && ext.ossrhPassword != null &&
+            ext.ossrhReleaseUrl != null && ext.ossrhSnapshotUrl != null) {
+            ext.useSonatypeOssrhCredentials = true
         }
-        println "Using Sonatype OSSRH Credentials"
     }
 }
 else {
     // Disable Signing
     println "Maven Signing Disabled"
+}
+
+if (ext.useSonatypeOssrhCredentials) {
+    println "Using Sonatype OSSRH Credentials"
+}
+else {
+    println "Not using Sonatype OSSRH Credentials"
 }
