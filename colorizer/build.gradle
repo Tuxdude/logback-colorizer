@@ -23,6 +23,10 @@ jar {
 
 // Configure FindBugs for maximum effort and to report all failures
 findbugs {
+    if (JavaVersion.current() == JavaVersion.VERSION_1_6 ||
+        JavaVersion.current() == JavaVersion.VERSION_1_5) {
+        toolVersion = '2.0.2'
+    }
     effort = 'max'
     reportLevel = "low"
     ignoreFailures = true
