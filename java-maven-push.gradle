@@ -1,0 +1,159 @@
+apply plugin: 'maven'
+
+def isReleaseVersion() {
+    return !version.endsWith("SNAPSHOT")
+}
+
+def isSigningRequired() {
+    return isReleaseVersion()
+}
+
+def getMavenSigningPropertiesFilename() {
+    return "$rootDir/maven-signing.properties"
+}
+
+def getMavenSigningConfigProperty() {
+    return "maven-signing-config"
+}
+
+def getSigningProperties() {
+    Properties signingProperties = null
+    File mavenSigningFile = new File(getMavenSigningPropertiesFilename())
+    if (mavenSigningFile.exists()) {
+        println "Maven Signing Properties file exists"
+        Properties properties = new Properties()
+        properties.load(new FileInputStream(mavenSigningFile))
+        if (properties.containsKey(getMavenSigningConfigProperty())) {
+            File signingInfoFile = new File(properties[getMavenSigningConfigProperty()])
+            if (signingInfoFile.exists()) {
+                properties = new Properties()
+                properties.load(new FileInputStream(signingInfoFile))
+                signingProperties = properties
+            }
+            else {
+                println "Signing configuration file not found!"
+            }
+        }
+        else {
+            println "Cannot find signing configuration file property!"
+        }
+    }
+    else {
+        println "Cannot find Maven Signing Properties file"
+    }
+    return signingProperties
+}
+
+// GRADLE-1285 - workaround to get <packaging>jar</packaging>
+//               into the pom file
+def pomPackagingElement = { root ->
+    if (POM_PACKAGING.equalsIgnoreCase("jar")) {
+        def children = root.asNode().children()
+        def versionIndex = children.indexOf(children.find {it.name().localPart == 'version'})
+        children.add(versionIndex + 1, new Node(null, 'packaging', POM_PACKAGING))
+    }
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: RELEASE_REPOSITORY_URL) {
+                authentication(userName: "", password: "")
+            }
+
+            pom.groupId = GROUP
+            pom.artifactId = POM_ARTIFACT_ID
+            pom.version = VERSION_NAME
+
+            pom {
+                project {
+                    name POM_NAME
+                    packaging POM_PACKAGING
+                    description POM_DESCRIPTION
+                    url POM_URL
+                    inceptionYear POM_INCEPTION_YEAR
+
+                    scm {
+                        url POM_SCM_URL
+                        connection POM_SCM_CONNECTION
+                        developerConnection POM_SCM_DEV_CONNECTION
+                    }
+
+                    licenses {
+                        license {
+                            name POM_LICENCE_NAME
+                            url POM_LICENCE_URL
+                            distribution POM_LICENCE_DIST
+                        }
+                    }
+
+                    developers {
+                        developer {
+                            id POM_DEVELOPER_ID
+                            name POM_DEVELOPER_NAME
+                            email POM_DEVELOPER_EMAIL
+                        }
+                    }
+
+                    issueManagement {
+                        system POM_ISSUE_MANAGEMENT_SYSTEM
+                        url POM_ISSUE_MANAGEMENT_URL
+                    }
+                }
+            }
+
+            pom.withXml pomPackagingElement
+        }
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    description = 'Builds a javadoc jar artifact suitable for maven deployment'
+    classifier = 'javadoc'
+    from javadoc
+}
+
+task allSourcesJar(type: Jar) {
+    description = 'Builds a source jar artifact suitable for maven deployment'
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+artifacts {
+    archives allSourcesJar
+    archives javadocJar
+}
+
+// Maven Signing stuff
+Properties signingProperties = null
+if (isSigningRequired()) {
+    signingProperties = getSigningProperties()
+}
+if (signingProperties != null) {
+    // Enable Signing
+    apply plugin: 'signing'
+
+    ext."signing.keyId" = signingProperties['keyId']
+    ext."signing.password" = signingProperties['password']
+    ext."signing.secretKeyRingFile" = signingProperties['secretKeyRingFile']
+
+    ext."signing.ossrhUsername" = signingProperties['ossrhUsername']
+    ext."signing.ossrhPassword" = signingProperties['ossrhPassword']
+
+    uploadArchives {
+        repositories {
+            mavenDeployer {
+                beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            }
+        }
+    }
+    signing {
+        sign configurations.archives
+        required true
+    }
+    println "Maven Signing Enabled"
+}
+else {
+    // Disable Signing
+    println "Maven Signing Disabled"
+}
