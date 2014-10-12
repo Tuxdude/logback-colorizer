@@ -99,7 +99,7 @@ uploadArchives {
                     password: project.getRepositoryPassword(false))
             }
 
-            snapshotRepository(url: getRepositoryUrl(true)) {
+            snapshotRepository(url: project.getRepositoryUrl(true)) {
                 authentication(
                     userName: project.getRepositoryUsername(true),
                     password: project.getRepositoryPassword(true))
