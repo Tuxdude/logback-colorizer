@@ -43,8 +43,40 @@ Example logback.xml
 
 Download
 ========
-* [logback-colorizer-1.0.0.jar][2]
-* `Maven` and `Gradle` based dependencies coming soon
+* *Gradle*
+
+    - Add the following dependency in the project's `build.gradle`
+
+    ```groovy
+    dependencies {
+        ...
+        ...
+        compile 'org.tuxdude.logback.extensions:logback-colorizer:1.0.0'
+        ...
+        ...
+    }
+    ```
+
+* *Maven*
+
+    - Add the following dependency in the project's `pom.xml`
+
+    ```xml
+    <dependencies>
+        ...
+        ...
+        <dependency>
+            <groupId>org.tuxdude.logback.extensions</groupId>
+            <artifactId>logback-colorizer</artifactId>
+            <version>1.0.0</version>
+            <type>jar</type>
+        </dependency>
+        ...
+        ...
+    </dependencies>
+    ```
+
+* Manually download the JAR from here: [`logback-colorizer-1.0.0.jar`][2]
 
 Available Colors
 ================
@@ -170,7 +202,7 @@ can be used numerous times within the same pattern.
 
 
 [1]: https://github.com/Tuxdude/logback-colorizer
-[2]: https://github.com/Tuxdude/maven-artifacts/blob/master/org/tuxdude/logback/extensions/logback-colorizer/1.0.0/logback-colorizer-1.0.0.jar
+[2]: https://oss.sonatype.org/content/groups/public/org/tuxdude/logback/extensions/logback-colorizer/1.0.0/logback-colorizer-1.0.0.jar
 [21]: http://logback.qos.ch/
 [22]: http://logback.qos.ch/manual/layouts.html#coloring
 [23]: http://tony19.github.io/logback-android/index.html
