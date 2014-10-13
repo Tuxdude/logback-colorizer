@@ -124,6 +124,10 @@ afterEvaluate { project ->
                         password: project.getRepositoryPassword(true))
                 }
 
+                // Get rid of optional dependencies (does not help having them anyways)
+                pom.whenConfigured { pom ->
+                    pom.dependencies.removeAll { it.scope == "optional" }
+                }
             }
         }
     }
@@ -177,6 +181,7 @@ uploadArchives {
         }
     }
 }
+
 
 task javadocJar(type: Jar, dependsOn: javadoc) {
     description = 'Builds a javadoc jar artifact suitable for maven deployment'
