@@ -1,6 +1,6 @@
 <h1>logback-colorizer</h1>
 
-<b>v1.0.0</b>
+<b>v1.0.1</b>
 
 Overview
 ========
@@ -51,7 +51,7 @@ Download
     dependencies {
         ...
         ...
-        compile 'org.tuxdude.logback.extensions:logback-colorizer:1.0.0'
+        compile 'org.tuxdude.logback.extensions:logback-colorizer:1.0.1'
         ...
         ...
     }
@@ -68,7 +68,7 @@ Download
         <dependency>
             <groupId>org.tuxdude.logback.extensions</groupId>
             <artifactId>logback-colorizer</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1</version>
             <type>jar</type>
         </dependency>
         ...
@@ -76,7 +76,7 @@ Download
     </dependencies>
     ```
 
-* Manually download the JAR from here: [`logback-colorizer-1.0.0.jar`][2]
+* Manually download the JAR from here: [`logback-colorizer-1.0.1.jar`][2]
 
 Available Colors
 ================
@@ -202,7 +202,7 @@ can be used numerous times within the same pattern.
 
 
 [1]: https://github.com/Tuxdude/logback-colorizer
-[2]: https://oss.sonatype.org/content/groups/public/org/tuxdude/logback/extensions/logback-colorizer/1.0.0/logback-colorizer-1.0.0.jar
+[2]: https://oss.sonatype.org/content/groups/public/org/tuxdude/logback/extensions/logback-colorizer/1.0.1/logback-colorizer-1.0.1.jar
 [21]: http://logback.qos.ch/
 [22]: http://logback.qos.ch/manual/layouts.html#coloring
 [23]: http://tony19.github.io/logback-android/index.html
