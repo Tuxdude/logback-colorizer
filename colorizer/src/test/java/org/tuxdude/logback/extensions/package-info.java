@@ -20,8 +20,8 @@
  * Set of unit tests for the log colorizer extension.
  *
  * @since 1.0
- * @author Ash (Tuxdude) <tuxdude.github@gmail.com>
+ * @author Ash (Tuxdude) [tuxdude.github@gmail.com]
  * @version 1.0
  */
 
-package org.tuxdude.logback.extensions.tests;
+package org.tuxdude.logback.extensions;

@@ -17,23 +17,18 @@
  *  limitations under the License.
  */
 
-package org.tuxdude.logback.extensions.tests;
+package org.tuxdude.logback.extensions;
 
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggerContextVO;
-import junitx.util.PrivateAccessor;
 
 import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
 import org.junit.Test;
-
-import org.tuxdude.logback.extensions.LogColorizer;
 
 /**
  * Test the LogColorizer.
@@ -64,17 +59,7 @@ public class TestLogColorizer {
             final ILoggingEvent mockEvent,
             final String input) {
         String result = null;
-        try {
-            result = (String) PrivateAccessor.invoke(
-                    logColorizer,
-                    "transform",
-                    new Class[] {ILoggingEvent.class, String.class},
-                    new Object[] {mockEvent, input});
-        } catch (Throwable throwable) {
-            StringWriter stringWriter = new StringWriter();
-            throwable.printStackTrace(new PrintWriter(stringWriter));
-            fail(stringWriter.toString());
-        }
+        logColorizer.transform(mockEvent, input);
         return result;
     }
 
@@ -167,7 +152,7 @@ public class TestLogColorizer {
                         false,
                         null,
                         false),
-                invokeTransform(logColorizer, mockEvent, input)
+                logColorizer.transform(mockEvent, input)
         );
 
         setLogLevel(mockEvent, Level.WARN);
@@ -178,7 +163,7 @@ public class TestLogColorizer {
                         true,
                         LogColorizer.COLOR_MAGENTA,
                         false),
-                invokeTransform(logColorizer, mockEvent, input)
+                logColorizer.transform(mockEvent, input)
         );
 
         setLogLevel(mockEvent, Level.INFO);
@@ -189,21 +174,19 @@ public class TestLogColorizer {
                         false,
                         LogColorizer.COLOR_BLUE,
                         false),
-                invokeTransform(logColorizer, mockEvent, input)
+                logColorizer.transform(mockEvent, input)
         );
 
         setLogLevel(mockEvent, Level.DEBUG);
         assertEquals(
                 input,
-                invokeTransform(logColorizer, mockEvent, input)
+                logColorizer.transform(mockEvent, input)
         );
-
-        System.out.println("Result is " + invokeTransform(logColorizer, mockEvent, input));
 
         setLogLevel(mockEvent, Level.TRACE);
         assertEquals(
                 input,
-                invokeTransform(logColorizer, mockEvent, input)
+                logColorizer.transform(mockEvent, input)
         );
     }
 }
