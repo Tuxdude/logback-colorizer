@@ -1,6 +1,6 @@
 /**
  *
- *  Copyright (C) 2014 Ash (Tuxdude) <tuxdude.github@gmail.com>
+ *  Copyright (C) 2014 Ash (Tuxdude) [tuxdude.github@gmail.com]
  *
  *  This file is part of logback-colorizer.
  *
