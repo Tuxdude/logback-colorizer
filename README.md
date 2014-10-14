@@ -2,6 +2,15 @@
 
 <b>v1.0.1</b>
 
+Build Status
+============
+
+|   **Branch/Tag**   |                                                               **Status**                                                              |
+|:------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
+|     **v1.0.1**     | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=v1.0.1)](https://travis-ci.org/Tuxdude/logback-colorizer) |
+|     **Master**     | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=master)](https://travis-ci.org/Tuxdude/logback-colorizer) |
+|      **Dev**       | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=dev)](https://travis-ci.org/Tuxdude/logback-colorizer)    |
+
 Overview
 ========
 
