@@ -94,4 +94,4 @@ checkstyleMain {
     }
 }
 
-apply from: '../java-maven-push.gradle'
+apply from: 'https://raw.githubusercontent.com/Tuxdude/gradle-plugins/master/java-maven-deploy/java-maven-deploy.gradle'
