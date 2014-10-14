@@ -1,6 +1,6 @@
 <h1>logback-colorizer</h1>
 
-<b>v1.0.1</b>
+**v1.0.1**
 
 Build Status
 ============
@@ -8,8 +8,8 @@ Build Status
 |   **Branch/Tag**   |                                                               **Status**                                                              |
 |:------------------:|:-------------------------------------------------------------------------------------------------------------------------------------:|
 |     **v1.0.1**     | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=v1.0.1)](https://travis-ci.org/Tuxdude/logback-colorizer) |
-|     **Master**     | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=master)](https://travis-ci.org/Tuxdude/logback-colorizer) |
-|      **Dev**       | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=dev)](https://travis-ci.org/Tuxdude/logback-colorizer)    |
+|     **master**     | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=master)](https://travis-ci.org/Tuxdude/logback-colorizer) |
+|      **dev**       | [![Build Status](https://travis-ci.org/Tuxdude/logback-colorizer.svg?branch=dev)](https://travis-ci.org/Tuxdude/logback-colorizer)    |
 
 Overview
 ========
@@ -52,7 +52,7 @@ Example logback.xml
 
 Download
 ========
-* *Gradle*
+* **Gradle**
 
     - Add the following dependency in the project's `build.gradle`
 
@@ -66,7 +66,7 @@ Download
     }
     ```
 
-* *Maven*
+* **Maven**
 
     - Add the following dependency in the project's `pom.xml`
 
@@ -85,7 +85,9 @@ Download
     </dependencies>
     ```
 
-* Manually download the JAR from here: [`logback-colorizer-1.0.1.jar`][2]
+* **Manually**
+
+     - Download [`logback-colorizer-1.0.1.jar`][2] and add it to your project's compile classpath
 
 Available Colors
 ================
