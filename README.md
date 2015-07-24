@@ -40,7 +40,7 @@ Example logback.xml
     <conversionRule conversionWord="colorize" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %colorize(%msg%n)</pattern>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %colorize(%msg)%n</pattern>
         </encoder>
     </appender>
 
@@ -184,7 +184,7 @@ can be used numerous times within the same pattern.
 <conversionRule conversionWord="colorize" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %colorize(%msg%n)</pattern>
+        <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %colorize(%msg)%n</pattern>
     </encoder>
 </appender>
 ```
@@ -195,7 +195,7 @@ can be used numerous times within the same pattern.
 <conversionRule conversionWord="github" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-        <pattern>%d{HH:mm:ss.SSS} %github([%thread]) %-5level %logger{36} - %github(%msg%n)</pattern>
+        <pattern>%d{HH:mm:ss.SSS} %github([%thread]) %-5level %logger{36} - %github(%msg)%n</pattern>
     </encoder>
 </appender>
 ```
@@ -206,7 +206,7 @@ can be used numerous times within the same pattern.
 <conversionRule conversionWord="rainbow" converterClass="org.tuxdude.logback.extensions.LogColorizer" />
 <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
     <encoder>
-        <pattern>%d{HH:mm:ss.SSS} %rainbow([%thread]) %-5level %rainbow(%logger{36}) - %rainbow(%msg%n)</pattern>
+        <pattern>%d{HH:mm:ss.SSS} %rainbow([%thread]) %-5level %rainbow(%logger{36}) - %rainbow(%msg)%n</pattern>
     </encoder>
 </appender>
 ```
